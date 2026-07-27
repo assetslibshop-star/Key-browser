@@ -6,11 +6,11 @@ A privacy-focused browser similar to Tor Browser, built with Python and PyQt5
 
 import sys
 import os
-from PyQt5.QtWidgets import (QApplication, QMainWindow, QWebEngineView, 
+from PyQt5.QtWidgets import (QApplication, QMainWindow, 
                              QVBoxLayout, QHBoxLayout, QWidget, QLineEdit, 
                              QPushButton, QStatusBar, QLabel, QFrame)
 from PyQt5.QtCore import QUrl, Qt
-from PyQt5.QtWebEngineWidgets import QWebEngineProfile, QWebEngineSettings
+from PyQt5.QtWebEngineWidgets import (QWebEngineView, QWebEngineProfile, QWebEngineSettings)
 
 
 class KeyBrowser(QMainWindow):
