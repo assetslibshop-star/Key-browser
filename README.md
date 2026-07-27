@@ -1,6 +1,6 @@
 # 🔑 Key - Maximum Privacy Browser
 
-A privacy-focused browser built with Electron that prioritizes user anonymity and security. Key operates exclusively in incognito mode, ensuring no data is ever stored locally.
+A privacy-focused browser built with Python and PyQt5 that prioritizes user anonymity and security. Key operates exclusively in incognito mode, ensuring no data is ever stored locally. Inspired by Tor Browser's privacy approach.
 
 ## 🛡️ Privacy Features
 
@@ -8,32 +8,33 @@ A privacy-focused browser built with Electron that prioritizes user anonymity an
 - **No History**: Browsing history is never saved
 - **No Cookies**: All cookies are blocked by default
 - **No Cache**: All caching is disabled
-- **No Local Storage**: localStorage, sessionStorage, IndexedDB, WebSQL all disabled
+- **No Local Storage**: All local storage mechanisms disabled
 - **No Form Data**: Form autocomplete is disabled
 - **No Passwords**: Password saving is disabled
-- **No Downloads History**: Download history is not tracked
-- **No Service Workers**: Service workers are disabled
+- **WebGL Disabled**: Prevents canvas fingerprinting
+- **No Plugins**: All plugins and extensions disabled
 
 ### Network Privacy
-- **DNS over HTTPS**: All DNS queries are encrypted using Cloudflare and Quad9 secure DNS
-- **Tracking Blocked**: Common tracking domains and analytics services are blocked
-- **Referrer Header Stripped**: No referrer information is sent to websites
-- **Origin Header Stripped**: Origin information is removed from requests
-- **Generic User Agent**: Uses a generic user agent string to reduce fingerprinting
-- **Popup Blocking**: All popups and new windows are blocked
+- **Tor Integration**: Built-in Tor support for anonymous routing
+- **DNS Leak Prevention**: DNS queries routed through Tor
+- **Tracking Blocked**: Common tracking domains blocked
+- **Referrer Header Stripped**: No referrer information sent
+- **Popup Blocking**: All popups blocked
+- **SOCKS5 Proxy**: Tor proxy configuration support
 
 ### Security Features
-- **Sandboxed Webviews**: All web content runs in sandboxed processes
-- **Context Isolation**: Renderer processes are isolated from main process
-- **No Node Integration**: Node.js integration is disabled in renderer
-- **Spell Check Disabled**: Prevents potential data leakage through spell checking
-- **Hardware Acceleration Disabled**: Reduces fingerprinting surface
+- **Sandboxed Architecture**: Web content isolated
+- **No Clipboard Access**: JavaScript cannot access clipboard
+- **No Window Opening**: JavaScript cannot open new windows
+- **Auto-Fill Disabled**: Form auto-fill completely disabled
+- **Session Isolation**: Each session completely isolated
 
 ## 📋 Requirements
 
-- Node.js (v16 or higher) - [Download here](https://nodejs.org/)
-- npm (comes with Node.js)
+- Python 3.8 or higher - [Download here](https://www.python.org/downloads/)
+- pip (comes with Python)
 - Git (for cloning the repository)
+- Tor (optional, for maximum anonymity) - [Download here](https://www.torproject.org/download/)
 
 ## 🚀 Installation
 
@@ -44,41 +45,50 @@ git clone https://github.com/assetslibshop-star/Key-browser.git
 cd Key-browser
 ```
 
-### Install Node.js (if not already installed)
+### Install Python (if not already installed)
 
-1. Download Node.js LTS from https://nodejs.org/
-2. Run the installer and follow the prompts
+1. Download Python 3.8+ from https://www.python.org/downloads/
+2. Run the installer and **check "Add Python to PATH"**
 3. Restart your terminal/command prompt
 
 ### Install Dependencies
 
 ```bash
-npm install
+pip install -r requirements.txt
 ```
+
+### Install Tor (Optional but Recommended)
+
+For maximum anonymity, install Tor:
+- **Windows**: Download from https://www.torproject.org/download/
+- **Linux**: `sudo apt install tor`
+- **macOS**: `brew install tor`
 
 ## 🎯 Running the Browser
 
-### Development Mode
+### Standard Mode (Direct Connection)
 
 ```bash
-npm start
+python key_browser.py
 ```
 
-### Build for Production
+### Tor Mode (Maximum Anonymity)
+
+1. Start Tor service
+2. Run with Tor enabled:
 
 ```bash
-npm run build
+python key_browser.py --tor
 ```
-
-The built application will be in the `dist` directory.
 
 ## 🎨 Usage
 
-1. **Launch the browser**: Run `npm start` to launch Key
+1. **Launch the browser**: Run `python key_browser.py` to launch Key
 2. **Navigate**: Enter a URL in the address bar and press Enter or click "Go"
 3. **Search**: Type a search query directly in the address bar (uses DuckDuckGo)
 4. **Navigation**: Use the back, forward, and refresh buttons
 5. **Privacy Mode**: The browser always runs in private mode - no action needed
+6. **Tor Mode**: Use `--tor` flag to route traffic through Tor network
 
 ### Keyboard Shortcuts
 
@@ -88,51 +98,53 @@ The built application will be in the `dist` directory.
 
 ## 🔧 Configuration
 
-Privacy settings are configured in `main.js`. You can modify:
+Privacy settings are configured in `key_browser.py`. You can modify:
 
-- Blocked tracking domains
-- DNS over HTTPS servers
-- User agent string
-- Session partition settings
-- Web request interceptors
+- Cookie and storage policies
+- Web security settings
+- Proxy settings for Tor
+- User agent and headers
+
+Tor configuration is in `tor_integration.py`. You can modify:
+
+- Tor port and host settings
+- Proxy configuration
+- DNS leak prevention settings
 
 ## 🏗️ Architecture
 
-### Main Process (`main.js`)
-- Creates and manages browser windows
-- Configures privacy sessions
-- Handles web request interception
-- Manages data clearing
+### Main Browser (`key_browser.py`)
+- Creates and manages browser window
+- Configures privacy settings
+- Handles navigation and UI
+- Manages data clearing on exit
 
-### Renderer Process (`renderer.js`)
-- Handles UI interactions
-- Manages webview navigation
-- Updates navigation state
-- Handles keyboard shortcuts
+### Tor Integration (`tor_integration.py`)
+- Manages Tor proxy connection
+- Handles DNS leak prevention
+- Provides Tor status checking
+- Supports identity rotation
 
-### Preload Script (`preload.js`)
-- Provides secure IPC bridge
-- Exposes safe APIs to renderer
-- Maintains context isolation
-
-### UI (`index.html`)
-- Browser interface with navigation controls
-- Privacy status indicators
-- New tab page with feature overview
+### Dependencies (`requirements.txt`)
+- PyQt5: GUI framework
+- PyQtWebEngine: Web browser engine
+- requests: HTTP library for Tor checks
+- PySocks: SOCKS proxy support
 
 ## 🔮 Future Enhancements
 
 This is a foundation for a privacy-focused browser. Future versions could include:
 
-- **Tor Integration**: Route traffic through Tor network for multi-relay routing
+- **Advanced Tor Integration**: Automatic Tor circuit rotation and bridge support
 - **VPN Integration**: Built-in VPN support for IP masking
 - **Additional IP Obfuscation**: Multi-hop routing and IP rotation
 - **End-to-End Encryption**: Built-in encrypted messaging and file sharing
 - **Cryptocurrency Integration**: Privacy-focused cryptocurrency support
 - **Physical Isolation**: Integration with Tails or similar privacy OS
-- **Advanced Fingerprinting Protection**: Canvas and WebGL fingerprinting protection
+- **Advanced Fingerprinting Protection**: Enhanced canvas and WebGL protection
 - **HTTPS Only**: Force HTTPS connections
 - **Certificate Pinning**: Additional TLS security
+- **Header Randomization**: Randomize headers to prevent fingerprinting
 
 ## 🤝 Contributing
 
@@ -148,7 +160,7 @@ This browser provides privacy features but does not guarantee complete anonymity
 
 ## 🙏 Acknowledgments
 
-Built with [Electron](https://www.electronjs.org/)
+Built with [Python](https://www.python.org/) and [PyQt5](https://www.riverbankcomputing.com/software/pyqt/)
 Privacy inspiration from [Tor Browser](https://www.torproject.org/) and [Brave Browser](https://brave.com/)
 
 ---
