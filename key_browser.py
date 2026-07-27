@@ -49,8 +49,7 @@ class KeyBrowser(QMainWindow):
         settings.setAttribute(QWebEngineSettings.LocalContentCanAccessFileUrls, False)
         
         # Disable auto-fill and forms
-        settings.setAttribute(QWebEngineSettings.AutoFillEnabled, False)
-        settings.setAttribute(QWebEngineSettings.SavePageStateEnabled, False)
+        # Note: AutoFillEnabled not available in PyQt5, handled at profile level
         
         # Disable plugins and extensions
         settings.setAttribute(QWebEngineSettings.PluginsEnabled, False)
