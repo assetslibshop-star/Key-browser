@@ -8,6 +8,8 @@ import sys
 import os
 import base64
 import hashlib
+import random
+import string
 from PyQt5.QtWidgets import (QApplication, QMainWindow, 
                              QVBoxLayout, QHBoxLayout, QWidget, QLineEdit, 
                              QPushButton, QStatusBar, QLabel, QFrame, QCheckBox)
@@ -41,109 +43,134 @@ class KeyBrowser(QMainWindow):
         self.load_start_page()
     
     def encrypt_text(self, text):
-        """Encrypt text for display (visual obfuscation)"""
+        """Encrypt text for display with random characters"""
         if not text or not self.encrypt_urls:
             return text
-        # Simple visual encryption - show asterisks and partial hash
+        
+        # Generate random characters for encryption
+        chars = string.ascii_letters + string.digits + '!@#$%^&*()_+-=[]{}|;:,.<>?'
+        
         if text.startswith('http'):
             parts = text.split('/')
             if len(parts) > 2:
                 domain = parts[2]
-                encrypted_domain = '*' * (len(domain) - 4) + domain[-4:]
+                # Generate random string of same length
+                encrypted_domain = ''.join(random.choice(chars) for _ in range(len(domain)))
+                # Keep TLD visible for usability
+                if '.' in domain:
+                    tld = domain.split('.')[-1]
+                    encrypted_domain = encrypted_domain[:-len(tld)] + tld
                 return '/'.join(parts[:2]) + '//' + encrypted_domain + '/' + '/'.join(parts[3:])
-        return '*' * len(text)
+        
+        # For non-URLs, generate random string
+        return ''.join(random.choice(chars) for _ in range(len(text)))
     
     def apply_theme(self):
         """Apply theme styling"""
         if self.dark_mode:
-            # Dark theme
+            # Dark theme - Modern and sleek
             self.setStyleSheet("""
                 QMainWindow {
-                    background-color: #1a1a2e;
+                    background-color: #0d1117;
+                }
+                QWidget {
+                    background-color: #0d1117;
                 }
                 QLineEdit {
-                    background-color: #16213e;
-                    color: #eee;
-                    border: 2px solid #0f3460;
-                    border-radius: 8px;
-                    padding: 8px 12px;
+                    background-color: #161b22;
+                    color: #c9d1d9;
+                    border: 2px solid #30363d;
+                    border-radius: 6px;
+                    padding: 10px 15px;
                     font-size: 14px;
+                    font-family: 'Segoe UI', Arial, sans-serif;
                 }
                 QLineEdit:focus {
-                    border: 2px solid #ffd700;
+                    border: 2px solid #58a6ff;
+                    background-color: #0d1117;
                 }
                 QPushButton {
-                    background-color: #0f3460;
-                    color: #eee;
+                    background-color: #238636;
+                    color: #ffffff;
                     border: none;
-                    border-radius: 8px;
-                    padding: 8px 16px;
+                    border-radius: 6px;
+                    padding: 10px 20px;
                     font-size: 14px;
-                    font-weight: bold;
+                    font-weight: 600;
+                    font-family: 'Segoe UI', Arial, sans-serif;
                 }
                 QPushButton:hover {
-                    background-color: #1a4a7a;
+                    background-color: #2ea043;
                 }
                 QPushButton:pressed {
-                    background-color: #ffd700;
-                    color: #1a1a2e;
+                    background-color: #238636;
                 }
                 QPushButton:disabled {
-                    background-color: #0a1a3a;
-                    color: #666;
+                    background-color: #21262d;
+                    color: #484f58;
                 }
                 QStatusBar {
-                    background-color: #16213e;
-                    color: #888;
-                    border-top: 2px solid #0f3460;
+                    background-color: #161b22;
+                    color: #8b949e;
+                    border-top: 1px solid #30363d;
+                    font-size: 12px;
                 }
                 QLabel {
-                    color: #eee;
+                    color: #c9d1d9;
+                    font-family: 'Segoe UI', Arial, sans-serif;
                 }
             """)
         else:
-            # Light theme
+            # Light theme - Clean and modern
             self.setStyleSheet("""
                 QMainWindow {
-                    background-color: #f5f5f5;
+                    background-color: #ffffff;
+                }
+                QWidget {
+                    background-color: #ffffff;
                 }
                 QLineEdit {
-                    background-color: #ffffff;
-                    color: #333;
-                    border: 2px solid #ddd;
-                    border-radius: 8px;
-                    padding: 8px 12px;
+                    background-color: #f6f8fa;
+                    color: #24292f;
+                    border: 2px solid #d0d7de;
+                    border-radius: 6px;
+                    padding: 10px 15px;
                     font-size: 14px;
+                    font-family: 'Segoe UI', Arial, sans-serif;
                 }
                 QLineEdit:focus {
-                    border: 2px solid #ffd700;
+                    border: 2px solid #0969da;
+                    background-color: #ffffff;
                 }
                 QPushButton {
-                    background-color: #ffd700;
-                    color: #1a1a2e;
+                    background-color: #1f6feb;
+                    color: #ffffff;
                     border: none;
-                    border-radius: 8px;
-                    padding: 8px 16px;
+                    border-radius: 6px;
+                    padding: 10px 20px;
                     font-size: 14px;
-                    font-weight: bold;
+                    font-weight: 600;
+                    font-family: 'Segoe UI', Arial, sans-serif;
                 }
                 QPushButton:hover {
-                    background-color: #ffed4a;
+                    background-color: #388bfd;
                 }
                 QPushButton:pressed {
-                    background-color: #e6c200;
+                    background-color: #1f6feb;
                 }
                 QPushButton:disabled {
-                    background-color: #e0e0e0;
-                    color: #999;
+                    background-color: #f6f8fa;
+                    color: #6e7781;
                 }
                 QStatusBar {
-                    background-color: #f0f0f0;
-                    color: #666;
-                    border-top: 2px solid #ddd;
+                    background-color: #f6f8fa;
+                    color: #57606a;
+                    border-top: 1px solid #d0d7de;
+                    font-size: 12px;
                 }
                 QLabel {
-                    color: #333;
+                    color: #24292f;
+                    font-family: 'Segoe UI', Arial, sans-serif;
                 }
             """)
     
@@ -153,7 +180,7 @@ class KeyBrowser(QMainWindow):
         self.apply_theme()
         # Update webview theme
         if self.dark_mode:
-            self.browser.page().setBackgroundColor(QColor("#1a1a2e"))
+            self.browser.page().setBackgroundColor(QColor("#0d1117"))
         else:
             self.browser.page().setBackgroundColor(QColor("#ffffff"))
     
@@ -232,9 +259,9 @@ class KeyBrowser(QMainWindow):
         
         # URL bar
         self.url_bar = QLineEdit()
-        self.url_bar.setPlaceholderText("🔒 Encrypted URL or search...")
+        self.url_bar.setPlaceholderText("Enter URL or search...")
         self.url_bar.returnPressed.connect(self.navigate)
-        self.url_bar.setEchoMode(QLineEdit.Password)  # Mask input by default
+        self.url_bar.setMinimumHeight(35)
         nav_layout.addWidget(self.url_bar)
         
         # Toggle encryption button
