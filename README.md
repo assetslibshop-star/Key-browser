@@ -31,7 +31,7 @@ A privacy-focused browser built with Electron that prioritizes user anonymity an
 
 ## 📋 Requirements
 
-- Node.js (v16 or higher)
+- Node.js (v16 or higher) - [Download here](https://nodejs.org/)
 - npm (comes with Node.js)
 - Git (for cloning the repository)
 
@@ -40,9 +40,15 @@ A privacy-focused browser built with Electron that prioritizes user anonymity an
 ### Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/Key-browser.git
+git clone https://github.com/assetslibshop-star/Key-browser.git
 cd Key-browser
 ```
+
+### Install Node.js (if not already installed)
+
+1. Download Node.js LTS from https://nodejs.org/
+2. Run the installer and follow the prompts
+3. Restart your terminal/command prompt
 
 ### Install Dependencies
 
