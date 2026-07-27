@@ -58,8 +58,7 @@ class KeyBrowser(QMainWindow):
         settings.setAttribute(QWebEngineSettings.JavascriptCanAccessClipboard, False)
         settings.setAttribute(QWebEngineSettings.JavascriptCanOpenWindows, False)
         
-        # Disable history
-        settings.setAttribute(QWebEngineSettings.HistoryEnabled, False)
+        # Note: History disabled at profile level
         
         print("Privacy configuration: Maximum security mode enabled")
     
